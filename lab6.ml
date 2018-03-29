@@ -100,12 +100,16 @@ predicate.  Example:
    - : int list = [0; 2; 4; 6; 8; 10; 12; 14; 16; 18]
  *)
 
-let sfilter _ = failwith "sfilter not implemented" ;;
+let rec sfilter (f : 'a -> bool) (a : 'a stream) : ('b stream) =
+  if f (head a) then 
+    fun () -> Cons((head a), sfilter f (tail a))
+  else sfilter f (tail a) ;;
   
 (* Now redefine evens and odds using sfilter *)
 
-let evens2 _ = failwith "evens with sfilter not implemented" ;;
-let odds2 _ = failwith "odds with sfilter not implemented" ;;
+let evens2 : 'b stream = sfilter (fun x -> x mod 2 = 0) nats ;;
+
+let odds2 : 'b stream = sfilter (fun x -> x mod 2 = 1) nats ;;
 
 (*====================================================================
 Part 2: Eratosthenes Sieve
