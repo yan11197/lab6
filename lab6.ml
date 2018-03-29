@@ -65,23 +65,25 @@ succeeding exercises, you shouldn't feel beholden to how the
 definition is introduced in the skeleton code below. (We'll stop
 mentioning this now, and forevermore.) *)
 
-let twos = fun () -> failwith "twos not implemented" ;;
+let twos = smap ( (+) 1) ones ;;
 
 (* An infinite stream of threes, built from the ones and twos. *)
 
-let threes = fun () -> failwith "threes not implemented" ;;
+let threes = smap2 (+) twos ones ;;
   
 (* An infinite stream of natural numbers (0, 1, 2, 3, ...). *)
 
-let nats = fun () -> failwith "nats not implemented" ;;
+let rec nats : int stream =
+  fun () -> Cons(0, smap ( (+) 1) nats) ;;
 
 (* Now some new examples. For these, don't build them directly, but
 make use of the stream mapping functions. *)
 
 (* Infinite streams of even and odd numbers. *)
 
-let evens () = failwith "evens not implemented" ;;
-let odds () = failwith "odds not implemented" ;;
+let evens = smap2 ( * ) twos nats ;;
+
+let odds = smap ( (+) 1) evens ;;
 
 (* In addition to mapping over streams, we should be able to use all
 the other higher-order list functions you've grown to know and love,
